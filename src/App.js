@@ -15,61 +15,16 @@ class App extends Component {
     ],
     filter: "",
   };
-  componentDidMount() {
-    const parsedContacts = JSON.parse(localStorage.getItem("contacts"));
 
-    parsedContacts && this.setState({ contacts: parsedContacts });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      localStorage.setItem("contacts", JSON.stringify(this.state.contacts));
-    }
-  }
-  onFormSubmitHandler = (name, number) => {
-    if (this.state.contacts.find((contact) => contact.name === name)) {
-      alert("Введите другое имя!");
-      return;
-    }
-
-    this.setState((prevState) => ({
-      contacts: [...prevState.contacts, { id: uuidv4(), name, number }],
-    }));
-  };
-
-  onHandleFilter = (e) => {
-    this.setState({ filter: e.currentTarget.value });
-  };
-
-  onHandleContactForm = (event) => {
-    const { name, value } = event.currentTarget;
-    this.setState({ [name]: value });
-  };
-
-  deleteContact = (id) => {
-    this.setState((prevState) => ({
-      contacts: prevState.contacts.filter((contact) => contact.id !== id),
-    }));
-  };
   render() {
     return (
       <>
         <Section title={"Phonebook"}>
-          <ContactForm
-            onHandlerFilter={this.onHandlerFilter}
-            onSubmit={this.onFormSubmitHandler}
-          />
+          <ContactForm />
         </Section>
         <Section title={"Contacts"}>
-          <Filter
-            onHandlerFilter={this.onHandleContactForm}
-            filter={this.state.filter}
-          />
-          <ContactsList
-            contacts={this.state.contacts}
-            filter={this.state.filter}
-            onDeleteContact={this.deleteContact}
-          />
+          <Filter />
+          <ContactsList />
         </Section>
       </>
     );

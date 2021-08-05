@@ -1,22 +1,36 @@
-import React, { Component } from "react";
-import { v4 as uuidv4 } from "uuid";
+import React from "react";
 import Styles from "./Filter.module.css";
-class Filter extends Component {
-  filterId = uuidv4();
-  render() {
-    return (
-      <>
-        <input
-          className={Styles.contactInput}
-          value={this.props.filter}
-          onChange={this.props.onHandlerFilter}
-          type="text"
-          name="filter"
-          id={this.filterId}
-        ></input>
-      </>
-    );
-  }
-}
+import PropTypes from "prop-types";
 
-export default Filter;
+import { connect } from "react-redux";
+import { filterContacts } from "../../redux/phonebook/phoneBook.actions";
+
+const Filter = ({ filter, handleChange }) => {
+  return (
+    <label>
+      <input
+        className={Styles.contactInput}
+        type="text"
+        name="filter"
+        placeholder="Поиск по имени..."
+        value={filter}
+        onChange={handleChange}
+      />
+    </label>
+  );
+};
+
+Filter.propTypes = {
+  filter: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  filter: state.contacts.filter,
+});
+
+const mapDispatchToProps = {
+  handleChange: (evt) => filterContacts(evt.target.value),
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);
